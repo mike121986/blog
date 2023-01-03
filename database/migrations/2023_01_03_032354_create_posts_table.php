@@ -13,10 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('posts', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('slug');
+            $table->string('extract');
+            $table->longText('body');
+            $table->enum('status',[1,2])->default(1);
+            $table->unsignedBigInteger('user-id');
+            $table->unsignedBigInteger('category-id');
+            $table->foreign('user-id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('category-id')->references('id')->on('categories')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -28,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('posts');
     }
 };
